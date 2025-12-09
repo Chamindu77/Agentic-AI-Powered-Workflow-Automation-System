@@ -18,21 +18,26 @@ app.use(cors({
 }));
 app.use(express.json());
 app.get("/", (req, res) => {
-  res.send("Backend running successfully ");
-});app.use('/auth', authRoutes);
+    res.send("Backend running successfully ");
+}); app.use('/auth', authRoutes);
 
 // Error handler (should be last)
 app.use(errorHandler);
 
-// Connect to MongoDB then start server
+// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
     console.log('MongoDB connected');
-    const PORT = process.env.PORT || 5001;
-    app.listen(PORT, () => console.log(`Auth server running on port ${PORT}`));
 }).catch((err) => {
     console.error('MongoDB connection error:', err);
-    process.exit(1);
 });
+
+// Start server only if run directly (not in Vercel)
+if (require.main === module) {
+    const PORT = process.env.PORT || 5001;
+    app.listen(PORT, () => console.log(`Auth server running on port ${PORT}`));
+}
+
+module.exports = app;
