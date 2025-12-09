@@ -13,7 +13,7 @@ const errorHandler = require('./middleware/errorHandler');
 app.use(logger);
 app.use(rateLimiter);
 app.use(cors({
-    origin: '*',
+    origin: 'https://agentic-ai-powered-workflow-automat.vercel.app',
     credentials: true
 }));
 app.use(express.json());
