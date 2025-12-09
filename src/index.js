@@ -13,7 +13,7 @@ const errorHandler = require('./middleware/errorHandler');
 app.use(logger);
 app.use(rateLimiter);
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: '*',
     credentials: true
 }));
 app.use(express.json());
