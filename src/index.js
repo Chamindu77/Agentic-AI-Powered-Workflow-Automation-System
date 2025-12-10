@@ -25,12 +25,11 @@ app.get("/", (req, res) => {
 // Error handler (should be last)
 app.use(errorHandler);
 
+const dbConnect = require('./utils/db');
+
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI).then(() => {
-    console.log('MongoDB connected');
-}).catch((err) => {
-    console.error('MongoDB connection error:', err);
-});
+dbConnect().catch(err => console.error('MongoDB connection error:', err));
+
 
 // Start server only if run directly (not in Vercel)
 if (require.main === module) {
