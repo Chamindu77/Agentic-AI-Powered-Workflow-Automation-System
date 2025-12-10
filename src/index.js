@@ -11,6 +11,7 @@ const rateLimiter = require('./middleware/rateLimiter');
 const errorHandler = require('./middleware/errorHandler');
 
 app.use(logger);
+app.set('trust proxy', 1); // Trust first proxy (Vercel)
 app.use(rateLimiter);
 app.use(cors({
     origin: 'https://agentic-ai-powered-workflow-automat-olive.vercel.app',
@@ -25,10 +26,7 @@ app.get("/", (req, res) => {
 app.use(errorHandler);
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => {
+mongoose.connect(process.env.MONGODB_URI).then(() => {
     console.log('MongoDB connected');
 }).catch((err) => {
     console.error('MongoDB connection error:', err);
