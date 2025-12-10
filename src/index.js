@@ -37,6 +37,39 @@ app.get("/", (req, res) => {
 // Error handler (should be last)
 app.use(errorHandler);
 
+const axios = require('axios');
+
+// Add this below your existing routes
+app.post('/send-sms', async (req, res) => {
+    try {
+        // You can customize the message and destination via req.body
+        const { message, destination } = req.body;
+
+        const payload = {
+            version: "1.0",
+            applicationId: "APP_009662",
+            password: "cda8c82bbb8e61ac23489baa52a9d731",
+            message: message || "Hello",
+            destinationAddresses: [ `tel:${destination || '94702670267'}` ],
+            sourceAddress: "77000",
+            deliveryStatusRequest: "1",
+            encoding: "245",
+            binaryHeader: "526574697265206170706c69636174696f6e20616e642072656c6561736520524b7320696620666f756e642065787069726564"
+        };
+
+        const response = await axios.post('https://api.mspace.lk/sms/send', payload, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        res.status(200).json({
+            message: 'SMS sent successfully',
+            data: response.data
+        });
+    } catch (err) {
+        console.error('SMS sending error:', err.response?.data || err.message);
+        res.status(500).json({ message: 'Failed to send SMS', error: err.response?.data || err.message });
+    }
+});
 
 
 
